@@ -11,17 +11,17 @@ const User = require('./model/userSchema.js');
 
 app.use(require('./router/auth.js'))
 
-const middleware = (req, res, next) => {
-    console.log("Middleware");
-    next();
-}
-app.get('/login', (req, res) => {
-    res.send('hello from server');
-});
+// const middleware = (req, res, next) => {
+//     console.log("Middleware");
+//     next();
+// }
+// app.get('/login', (req, res) => {
+//     res.send('hello from server');
+// });
 
-app.get('/home', middleware, (req, res) => {
-    res.send('hello from server');
-});
+// app.get('/home', middleware, (req, res) => {
+//     res.send('hello from server');
+// });
 
 app.get('/checkout', (req, res) => {
     res.send('hello from server');

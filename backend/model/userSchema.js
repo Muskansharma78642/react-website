@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    cartItems: [
+
+    ],
+    products: [
+
+    ],
     tokens: [{
         token: {
             type: String,

@@ -1,12 +1,16 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const cookieParser = require("cookie-parser");
+router.use(cookieParser);
+const authenticate = require('../middleware/authenticate.js')
 
-const User = require('../model/userSchema.js')
 
-router.get('/login', (req, res) => {
-    res.send('hello from router');
-});
+const User = require('../model/userSchema.js');
+
+// router.get('/login', (req, res) => {
+//     res.send('hello from router');
+// });
 
 router.post('/register', async(req, res) => {
     const { username, email, phone, password } = req.body;
@@ -26,7 +30,7 @@ router.post('/register', async(req, res) => {
         //hashing password 
 
         await user.save();
-        res.status(201).json({ message: 'User Registered' })
+        res.status(201).json({ message: 'User Registered' });
         console.log(user)
     } catch (err) {
         console.log(err);
@@ -45,12 +49,8 @@ router.post('/login', async(req, res) => {
         const userLogin = await User.findOne({ email: email });
 
         if (!userLogin) {
-            res.status(400).json({ error: "User does not exist, Register Yourself" })
-        } else if (password != userLogin.password) {
-            res.status(400).json({ error: "Incorrect Password" })
+            res.status(400).json({ error: "User does not exist, Register Yourself" });
         } else {
-            //res.json({ message: "User Logged In Successfully" });
-
             token = await userLogin.generateAuthToken();
             //console.log(token)
             res.cookie("jwtoken", token, {
@@ -59,9 +59,19 @@ router.post('/login', async(req, res) => {
             });
         }
 
+        if (password != userLogin.password) {
+            res.status(400).json({ error: "Incorrect Password" });
+        } else {
+            res.json({ message: "User Logged In Successfully" });
+        }
+
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
+})
+
+router.get('/product', authenticate, (req, res) => {
+    res.send(req.rootUser);
 })
 
 module.exports = router;

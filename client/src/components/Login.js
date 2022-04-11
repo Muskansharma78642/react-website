@@ -21,7 +21,7 @@ const Login = () => {
     if(res.status === 400 || !data){
       console.log("Invalid Credentials");
     } else {
-      console.log("Login Successful")
+      console.log("Login Successful") 
     }
   } 
 
