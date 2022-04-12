@@ -7,7 +7,7 @@ const storedProducts = JSON.parse(localStorage.getItem("products"))
 const Products = () => {
     const [products, setProducts] = useState(storedProducts)
     const [activeUser, setActiveUser] = useState();
-        //const [cartQuantity, setCartQuantity] = useState(activeUser.cartItem.length)
+    const [cartQuantity, setCartQuantity] = useState({})
     //console.log(products)
 
     const callProductsPage = async () => {
@@ -20,8 +20,9 @@ const Products = () => {
                 credentials: "include"
             });
             const activeUser = await res.json();
-            console.log(activeUser)
             setActiveUser(activeUser)
+            setCartQuantity(activeUser.cartItems.length)
+            localStorage.setItem("activeUser", JSON.stringify(activeUser))
 
             if(!res.status === 200) {
                 const error = new Error(res.error);
@@ -31,77 +32,75 @@ const Products = () => {
             console.log(err);
         }
     }
+    console.log(activeUser)
 
     useEffect(() => {
         callProductsPage();
     },[])
 
     const addProduct = (id) => {
-        // console.log(id)
-        // products.map((item) => {
-        //   if(item.productId === id){
-        //     let selectedProduct = {
-        //       id: item.productId,
-        //       name: item.productName,
-        //       quantity: 1,
-        //     }
-        //     activeUser.cartItem.push(item)
-        //     activeUser.product.push(selectedProduct)
-        //     localStorage.setItem("activeUser", JSON.stringify(activeUser)) 
-        //     setCartQuantity(activeUser.cartItem.length)
-        //     removeAddButton(id)
-        //   }
-        // })
+        console.log(id)
+        products.map((item) => {
+          if(item.productId === id){
+            let selectedProduct = {
+              id: item.productId,
+              name: item.productName,
+              quantity: 1,
+            }
+            activeUser.cartItems.push(item)
+            activeUser.products.push(selectedProduct)
+            localStorage.setItem("activeUser", JSON.stringify(activeUser)) 
+            setCartQuantity(activeUser.cartItems.length)
+            removeAddButton(id)
+          }
+        })
 
     }
 
     const increaseQuantity = (id) => {
-        // var number = document.getElementById(`numberOfProduct${id}`).value
-        // if(number >= 1){
-        //   number++
-        //   document.getElementById(`numberOfProduct${id}`).value = number
-        //   activeUser.cartItem.map((item) => {
-        //     if(item.productId === id){
-        //       item.productQuantity = number
-        //       localStorage.setItem("activeUser", JSON.stringify(activeUser))
-        //     }
-        //   })
-        // }  
+        var number = document.getElementById(`numberOfProduct${id}`).value
+        if(number >= 1){
+          number++
+          document.getElementById(`numberOfProduct${id}`).value = number
+          activeUser.cartItems.map((item) => {
+            if(item.productId === id){
+              item.productQuantity = number
+              localStorage.setItem("activeUser", JSON.stringify(activeUser))
+            }
+          })
+        }  
     }
 
     const decreaseQuantity = (id) => {
-        // var number = document.getElementById(`numberOfProduct${id}`).value
-        // if(number >= 1){
-        //   number--
-        //   document.getElementById(`numberOfProduct${id}`).value = number
-        //   activeUser.cartItem.map((item) => {
-        //     if(item.productId === id){
-        //       item.productQuantity = number
-        //       localStorage.setItem("activeUser", JSON.stringify(activeUser))
-        //     }
-        //   })
-        // }
+        var number = document.getElementById(`numberOfProduct${id}`).value
+        if(number >= 1){
+          number--
+          document.getElementById(`numberOfProduct${id}`).value = number
+          activeUser.cartItems.map((item) => {
+            if(item.productId === id){
+              item.productQuantity = number
+              localStorage.setItem("activeUser", JSON.stringify(activeUser))
+            }
+          })
+        }
     }
 
     const removeAddButton = (id) => {
-        // activeUser.product.map((item) => {
-        //    let button1 = document.getElementById(`addButton${item.id}`)
-        //      let button2 = document.getElementById(`quantityButton${item.id}`)
+        activeUser.products.map((item) => {
+           let button1 = document.getElementById(`addButton${item.id}`)
+             let button2 = document.getElementById(`quantityButton${item.id}`)
 
-        //      if(item.id === id){
-        //       if (item.quantity <= 0) {
-        //         button1.style.display = "block"
-        //         button2.style.display = "none"
-        //       } else if (item.quantity >= 1) {
-        //         button1.style.display = "none";
-        //         button2.style.display = "block"
-        //     }
-        //     }
-        // })
+             if(item.id === id){
+              if (item.quantity <= 0) {
+                button1.style.display = "block"
+                button2.style.display = "none"
+              } else if (item.quantity >= 1) {
+                button1.style.display = "none";
+                button2.style.display = "block"
+            }
+            }
+        })
     }
-
-    //  <a href='./checkout'>{`Checkout(${cartQuantity})`}</a>
-
 
 
     return(
@@ -110,6 +109,8 @@ const Products = () => {
       <a href='./registration'>Registeration</a>
       <a href='./login'>{ activeUser ? 'Logout' : 'Login'}</a>
       <a href='./products'>Products</a>
+      <a href='./checkout'>{`Checkout(${cartQuantity})`}</a>
+
     </nav>
     <div className='outer-grid'>
       {products.map((product) => {

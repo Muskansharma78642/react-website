@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const cookieParser = require("cookie-parser");
-router.use(cookieParser);
 const authenticate = require('../middleware/authenticate.js')
 
 
@@ -69,6 +67,9 @@ router.post('/login', async(req, res) => {
         console.log(err);
     }
 })
+
+const cookieParser = require("cookie-parser");
+router.use(cookieParser());
 
 router.get('/product', authenticate, (req, res) => {
     res.send(req.rootUser);

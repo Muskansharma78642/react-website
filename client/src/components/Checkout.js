@@ -7,10 +7,10 @@ const Checkout = () => {
   const [bill, setBill] = useState(0)
   
   const removeProduct = (id) => {
-    activeUser.cartItem.map((item) => {
+    activeUser.cartItems.map((item) => {
       if (item.productId === id) {
-        let newProducts = activeUser.cartItem.filter(x => x.productId !== id)
-        activeUser.cartItem = newProducts
+        let newProducts = activeUser.cartItems.filter(x => x.productId !== id)
+        activeUser.cartItems = newProducts
         console.log(newProducts)
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
@@ -24,7 +24,7 @@ const Checkout = () => {
     if (valueCount >= 1) {
       valueCount++
       document.getElementById(`numberOfProduct${id}`).value = valueCount
-      activeUser.cartItem.map((item) => {
+      activeUser.cartItems.map((item) => {
       if (item.productId === id) {
         item.productQuantity = valueCount
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
@@ -40,7 +40,7 @@ const Checkout = () => {
     if (valueCount >= 1) {
       valueCount--
       document.getElementById(`numberOfProduct${id}`).value = valueCount
-      activeUser.cartItem.map((item) => {
+      activeUser.cartItems.map((item) => {
       if (item.productId === id) {
         item.productQuantity = valueCount
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
@@ -53,7 +53,7 @@ const Checkout = () => {
   }
 
   const calculateBill = (id) => {
-    activeUser.cartItem.map((item) => {
+    activeUser.cartItems.map((item) => {
       let sum = 0
 
       let bill = item.productPrice * item.productQuantity
@@ -78,7 +78,7 @@ const Checkout = () => {
       <a href='./checkout'>Checkout</a>
     </nav>
     <div className='shop-items'>
-      {activeUser.cartItem.map((product) => {
+      {activeUser.cartItems.map((product) => {
         return (
             <div key={product.productId} className='item'>
               <div className='buttons'>
@@ -97,7 +97,7 @@ const Checkout = () => {
       })}
     </div>
     <div className='title'>Cart</div>
-    {activeUser.cartItem.map((product) => {
+    {activeUser.cartItems.map((product) => {
       return(
         <div className='shopping-cart' key={product.productId}>
           <div className='cart-row'>
