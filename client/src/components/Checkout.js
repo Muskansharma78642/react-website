@@ -5,6 +5,23 @@ let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
 const Checkout = () => {
   const [bill, setBill] = useState(0)
+
+  // const postProducts = async( _id, item ) => {
+  //     console.log(_id, item)
+  //     const res = await fetch('/product', {
+  //       method:"POST",
+  //       headers:{"Content-Type":"application/json"},
+  //       body: JSON.stringify({_id, item})
+  //     });
+  //     const data = await res.json();
+
+  //     if(!data) {
+  //       console.log("Products could not be stored on DB")
+  //     }else {
+  //       console.log("Product removed")
+  //       console.log(data)
+  //     }
+  //   }
   
   const removeProduct = (id) => {
     activeUser.cartItems.map((item) => {
@@ -14,6 +31,7 @@ const Checkout = () => {
         console.log(newProducts)
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
+        //postProducts(activeUser._id, activeUser.cartItems)
       }
     })
       window.location.reload()
@@ -61,8 +79,13 @@ const Checkout = () => {
       totalbill.push(bill)
       console.log(totalbill)
       for(let i = 0; i<= totalbill.length; i++){
-        sum = sum + bill
+        if(activeUser.cartItems.length === 1){
+          sum = bill
         setBill(sum)
+        }else{
+          sum = sum + bill
+        setBill(sum)
+        }
       }
     })
   }

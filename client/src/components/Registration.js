@@ -59,7 +59,6 @@ const Registration = () => {
     } else {
       console.log("registration successful")
       console.log(data)
- //     history.push('/login')
     }
   }
 

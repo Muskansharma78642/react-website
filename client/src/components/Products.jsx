@@ -32,13 +32,30 @@ const Products = () => {
             console.log(err);
         }
     }
-    console.log(activeUser)
+    //console.log(activeUser)
+
+    const postProducts = async( _id, item ) => {
+      console.log(_id, item)
+      const res = await fetch('/product', {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({_id, item})
+      });
+      const data = await res.json();
+
+      if(!data) {
+        console.log("Products could not be stored on DB")
+      }else {
+        console.log("Products stored successfully")
+        console.log(data)
+      }
+    }
 
     useEffect(() => {
         callProductsPage();
-    },[])
+    },[activeUser])
 
-    const addProduct = (id) => {
+    const addProduct = async (id) => {
         console.log(id)
         products.map((item) => {
           if(item.productId === id){
@@ -52,6 +69,7 @@ const Products = () => {
             localStorage.setItem("activeUser", JSON.stringify(activeUser)) 
             setCartQuantity(activeUser.cartItems.length)
             removeAddButton(id)
+            postProducts(activeUser._id, item) 
           }
         })
 
@@ -109,7 +127,7 @@ const Products = () => {
       <a href='./registration'>Registeration</a>
       <a href='./login'>{ activeUser ? 'Logout' : 'Login'}</a>
       <a href='./products'>Products</a>
-      <a href='./checkout'>{`Checkout(${cartQuantity})`}</a>
+      <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
 
     </nav>
     <div className='outer-grid'>

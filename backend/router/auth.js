@@ -71,8 +71,50 @@ router.post('/login', async(req, res) => {
 const cookieParser = require("cookie-parser");
 router.use(cookieParser());
 
-router.get('/product', authenticate, (req, res) => {
+router.get('/product', authenticate, async(req, res) => {
     res.send(req.rootUser);
+})
+
+router.post('/product', async(req, res) => {
+    try {
+        const { _id, item } = req.body;
+
+        if (!_id || !item) {
+            res.status(400).json({ error: "Someting went wrong.." })
+        }
+
+        await User.findByIdAndUpdate({
+            _id: _id,
+        }, {
+            $addToSet: {
+                cartItems: item,
+            },
+        });
+        res.json({ message: "Products stored" });
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/checkouts', async(req, res) => {
+    try {
+        const { _id, item } = req.body;
+
+        if (!_id || !item) {
+            res.status(400).json({ error: "Someting went wrong.." })
+        }
+
+        await User.findByIdAndUpdate({
+            _id: _id,
+        }, {
+            $addToSet: {
+                cartItems: item,
+            },
+        });
+        res.json({ message: "Products stored" });
+    } catch (err) {
+        console.log(err)
+    }
 })
 
 module.exports = router;

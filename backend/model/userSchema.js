@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
     cartItems: [
-
+        Object
     ],
     products: [
-
+        Object
     ],
     tokens: [{
         token: {

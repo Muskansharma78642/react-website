@@ -1,5 +1,6 @@
 import React,{ useState } from 'react';
 import './style.css';
+import GoogleLogin from "react-google-login"
 
 const users = JSON.parse(localStorage.getItem("users"))
 
@@ -24,6 +25,11 @@ const Login = () => {
       console.log("Login Successful") 
     }
   } 
+
+  const responseGoogle = (response) => {
+    console.log(response);
+    console.log(response.profile.Obj)
+  }
 
   return (
     <div>
@@ -56,6 +62,12 @@ const Login = () => {
           <p>{formErrors.password}</p>
 
             <button className="btn" onClick={loginUser}>Submit</button>
+            <GoogleLogin 
+              clientId="988952657537-a425ml6135ls565317pnq21rkfj6v1ek.apps.googleusercontent.com"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+            />
     </form>
     </div>
   );
