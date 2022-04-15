@@ -125,7 +125,7 @@ const Products = () => {
         <div>
       <nav id='navbar'>
       <a href='./registration'>Registeration</a>
-      <a href='./login'>{ activeUser ? 'Logout' : 'Login'}</a>
+      <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
       <a href='./products'>Products</a>
       <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
 

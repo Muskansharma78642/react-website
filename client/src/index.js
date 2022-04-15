@@ -6,6 +6,7 @@ import Registration from './components/Registration';
 import Login from './components/Login';
 import Products from './components/Products';
 import Checkout from './components/Checkout';
+import Logout from './components/Logout'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import reportWebVitals from './reportWebVitals';
@@ -19,6 +20,7 @@ ReactDOM.render(
         <Route path='/login' element={<Login />}></Route>
         <Route path='/products' element={<Products />}></Route>
         <Route path='/checkout' element={<Checkout />}></Route>
+        <Route path='/logout' element={<Logout />}></Route>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

@@ -6,22 +6,22 @@ let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 const Checkout = () => {
   const [bill, setBill] = useState(0)
 
-  // const postProducts = async( _id, item ) => {
-  //     console.log(_id, item)
-  //     const res = await fetch('/product', {
-  //       method:"POST",
-  //       headers:{"Content-Type":"application/json"},
-  //       body: JSON.stringify({_id, item})
-  //     });
-  //     const data = await res.json();
+  const postProducts = async( _id, item ) => {
+      console.log(_id, item)
+      const res = await fetch('/checkouts', {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({_id, item})
+      });
+      const data = await res.json();
 
-  //     if(!data) {
-  //       console.log("Products could not be stored on DB")
-  //     }else {
-  //       console.log("Product removed")
-  //       console.log(data)
-  //     }
-  //   }
+      if(!data) {
+        console.log("Products could not be stored on DB")
+      }else {
+        console.log("Product removed")
+        console.log(data)
+      }
+    }
   
   const removeProduct = (id) => {
     activeUser.cartItems.map((item) => {

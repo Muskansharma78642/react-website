@@ -96,7 +96,7 @@ router.post('/product', async(req, res) => {
     }
 })
 
-router.post('/checkouts', async(req, res) => {
+router.post('/checkouts', authenticate, async(req, res) => {
     try {
         const { _id, item } = req.body;
 
@@ -107,7 +107,7 @@ router.post('/checkouts', async(req, res) => {
         await User.findByIdAndUpdate({
             _id: _id,
         }, {
-            $addToSet: {
+            $pop: {
                 cartItems: item,
             },
         });
@@ -115,6 +115,12 @@ router.post('/checkouts', async(req, res) => {
     } catch (err) {
         console.log(err)
     }
+})
+
+router.get('/logout', (req, res) => {
+    console.log('Logout route');
+    res.clearCookie('jwtoken', { path: '/' })
+    res.status(200).send({ message: "User Logged Out" });
 })
 
 module.exports = router;
