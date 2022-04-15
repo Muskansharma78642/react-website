@@ -6,12 +6,12 @@ let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 const Checkout = () => {
   const [bill, setBill] = useState(0)
 
-  const postProducts = async( _id, item ) => {
-      console.log(_id, item)
+  const postProducts = async( _id, id ) => {
+      console.log(_id, id)
       const res = await fetch('/checkouts', {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({_id, item})
+        body: JSON.stringify({_id, id})
       });
       const data = await res.json();
 
@@ -31,7 +31,7 @@ const Checkout = () => {
         console.log(newProducts)
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
-        //postProducts(activeUser._id, activeUser.cartItems)
+        postProducts(activeUser._id, id)
       }
     })
       window.location.reload()

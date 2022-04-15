@@ -98,17 +98,17 @@ router.post('/product', async(req, res) => {
 
 router.post('/checkouts', authenticate, async(req, res) => {
     try {
-        const { _id, item } = req.body;
+        const { _id, id } = req.body;
 
-        if (!_id || !item) {
+        if (!_id || !id) {
             res.status(400).json({ error: "Someting went wrong.." })
         }
 
         await User.findByIdAndUpdate({
             _id: _id,
         }, {
-            $pop: {
-                cartItems: item,
+            $pull: {
+                cartItems: { 'productId': id }
             },
         });
         res.json({ message: "Products stored" });

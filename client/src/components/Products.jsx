@@ -84,6 +84,7 @@ const Products = () => {
             if(item.productId === id){
               item.productQuantity = number
               localStorage.setItem("activeUser", JSON.stringify(activeUser))
+            //postProducts(activeUser._id, item) 
             }
           })
         }  
@@ -98,6 +99,7 @@ const Products = () => {
             if(item.productId === id){
               item.productQuantity = number
               localStorage.setItem("activeUser", JSON.stringify(activeUser))
+            //postProducts(activeUser._id, item) 
             }
           })
         }
