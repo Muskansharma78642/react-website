@@ -1,14 +1,12 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../middleware/authenticate.js')
+const authenticate = require('../middleware/authenticate.js');
+//const uuid = require("uuid/dist/v4");
 
+const stripe = require("stripe")("sk_test_51Kq9C7SJmXUxWYIpNpUAShpTvNoPjeqfKdowRRb9JoVHRNXvmVK3Dlsr0b5t5AnLSYajZGe2irS8dKY81EvlOvQE00jiMIlHjJ")
 
 const User = require('../model/userSchema.js');
-
-// router.get('/login', (req, res) => {
-//     res.send('hello from router');
-// });
 
 router.post('/register', async(req, res) => {
     const { username, email, phone, password } = req.body;
@@ -111,7 +109,6 @@ router.post('/checkouts', authenticate, async(req, res) => {
                 cartItems: { 'productId': id }
             },
         });
-        res.json({ message: "Products stored" });
     } catch (err) {
         console.log(err)
     }
@@ -123,27 +120,30 @@ router.get('/logout', (req, res) => {
     res.status(200).send({ message: "User Logged Out" });
 })
 
+router.post('/payment', (req, res) => {
+    const { checkoutItems, token } = req.body;
+    console.log("PRODUCTS", checkoutItems);
+    console.log("PRICE", checkoutItems.productPrice)
+
+    return stripe.customers.create({
+            email: token.email,
+            source: token.id
+        }).then(costumer => {
+            stripe.charges.create({
+                amount: checkoutItems.productPrice,
+                costumer: costumer.id,
+                receipt_email: token.email,
+                description: checkoutItems.productName,
+                shipping: {
+                    name: token.card.name,
+                    address: {
+                        country: token.card.address_country
+                    },
+                },
+            })
+        })
+        .then(result => res.status(200).json(result))
+        .catch(err => console.log(err))
+})
+
 module.exports = router;
-
-// router.post('/register', (req, res) => {
-
-//     const { username, email, phone, password } = req.body;
-
-//     if (!username || !email || !phone || !password) {
-//         return res.status(422).json({ error: "please fill all the fields" });
-//     }
-
-//     User.findOne({ email: email })
-//         .then((userExist) => {
-//             if (userExist) {
-//                 return res.status(422).json({ error: "Email already Exist" });
-//             }
-
-//             const user = new User({ username, email, phone, password });
-
-//             user.save().then(() => {
-//                 res.status(201).json({ message: "User Registered" });
-//             }).catch((err) => res.status(500).json({ error: `Registration Failed ${err}` }));
-
-//         }).catch(err => { console.log(err); });
-// })

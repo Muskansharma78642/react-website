@@ -132,6 +132,7 @@ const Products = () => {
       <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
 
     </nav>
+    { activeUser ? <h3>{`${activeUser.username}, Welcome!`}</h3> : <h3>You need to login to Shop!</h3>}
     <div className='outer-grid'>
       {products.map((product) => {
       if(product.productId % 2 === 0){

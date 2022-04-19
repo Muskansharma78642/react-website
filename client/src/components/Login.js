@@ -28,7 +28,7 @@ const Login = () => {
 
   const responseGoogle = (response) => {
     console.log(response);
-    console.log(response.profile.Obj)
+    console.log(response.profileObj)
   }
 
   return (

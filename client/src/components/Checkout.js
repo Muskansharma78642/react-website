@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import './style.css';
+import StripeCheckout from 'react-stripe-checkout';
 
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
 const Checkout = () => {
+  const [checkoutItems, setCheckoutItems] = useState(activeUser.cartItems)
   const [bill, setBill] = useState(0)
 
   const postProducts = async( _id, id ) => {
@@ -32,6 +34,7 @@ const Checkout = () => {
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
         postProducts(activeUser._id, id)
+        setCheckoutItems(activeUser.cartItems)
       }
     })
       window.location.reload()
@@ -47,6 +50,7 @@ const Checkout = () => {
         item.productQuantity = valueCount
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
+        setCheckoutItems(activeUser.cartItems)
       }
     })
       window.location.reload()
@@ -63,6 +67,7 @@ const Checkout = () => {
         item.productQuantity = valueCount
         localStorage.setItem("activeUser", JSON.stringify(activeUser))
         setBill(item.productQuantity * item.productPrice)
+        setCheckoutItems(activeUser.cartItems)
       }
     })
       window.location.reload()
@@ -77,7 +82,7 @@ const Checkout = () => {
       let bill = item.productPrice * item.productQuantity
       let totalbill = []
       totalbill.push(bill)
-      console.log(totalbill)
+      //console.log(totalbill)
       for(let i = 0; i<= totalbill.length; i++){
         if(activeUser.cartItems.length === 1){
           sum = bill
@@ -92,11 +97,31 @@ const Checkout = () => {
 
   window.onload = calculateBill
 
+  const makePayment = token => {
+    const body = {
+      token,
+      checkoutItems
+    }
+    const headers = {
+      "Content-Type": "application/json"
+    }
+
+    return fetch("/payment", {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(body)
+    }).then(response => {
+      console.log("RESPONSE", response)
+      const {status} = response;
+      console.log('STATUS', status);
+    }).catch(error => console.log(error))
+  }
+
   return (
     <div>
       <nav id='navbar'>
       <a href='./registration'>Registeration</a>
-      <a href='./login'>Logout</a>
+      <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
       <a href='./products'>Products</a>
       <a href='./checkout'>Checkout</a>
     </nav>
@@ -137,6 +162,13 @@ const Checkout = () => {
       <h3 className='title'>Total Bill-</h3>
       <span>{bill}</span>
     </div>
+    <StripeCheckout 
+      stripeKey={process.env.REACT_APP_KEY}
+      token={makePayment}
+      name=''
+    >
+      <button className='btn'>Pay {bill}</button>
+    </StripeCheckout>
   </div>
   );
 }
