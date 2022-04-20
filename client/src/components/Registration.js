@@ -2,8 +2,6 @@ import React, {useState, useEffect} from 'react';
 //import { useHistory } from 'react-router-dom';
 import './style.css';
 
-let users = JSON.parse(localStorage.getItem("users"))
-
 const Registration = () => {
   const [formValues, setFormValues] = useState(
     { username: "", email: "", phone: "", password: ""}
@@ -27,20 +25,6 @@ const Registration = () => {
     setIsSubmit(true);
     console.log(formValues);
     const errors = {}
-    users.map((user) => {
-        if(user.firstName === formValues.username){
-            errors.password= "You are already a Registered user! Login instead."
-            return errors
-        }
-    })
-  // let newUser = {
-  //               "firstName": formValues.username,
-  //               "email": formValues.email,
-  //               "password": formValues.password,
-  //               "phone": formValues.phone
-  //           }
-  //           users.push(newUser)
-  //           localStorage.setItem("users", JSON.stringify(users)) 
   };
 
   const postData = async(e) => {

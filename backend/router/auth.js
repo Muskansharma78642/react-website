@@ -48,11 +48,12 @@ router.post('/login', async(req, res) => {
             res.status(400).json({ error: "User does not exist, Register Yourself" });
         } else {
             token = await userLogin.generateAuthToken();
-            //console.log(token)
-            res.cookie("jwtoken", token, {
-                expires: new Date(Date.now() + 25892000000),
-                httpOnly: true
-            });
+            console.log(token)
+                // res.cookie("jwtoken", token, {
+                //     expires: new Date(Date.now() + 25892000000),
+                //     httpOnly: true
+                // });
+            res.json({ userLogin, token })
         }
 
         if (password != userLogin.password) {
@@ -68,10 +69,9 @@ router.post('/login', async(req, res) => {
 
 const cookieParser = require("cookie-parser");
 router.use(cookieParser());
-
-router.get('/product', authenticate, async(req, res) => {
-    res.send(req.rootUser);
-})
+// router.get('/product', authenticate, async(req, res) => {
+//     res.send(req.rootUser);
+// })
 
 router.post('/product', async(req, res) => {
     try {
@@ -94,7 +94,7 @@ router.post('/product', async(req, res) => {
     }
 })
 
-router.post('/checkouts', authenticate, async(req, res) => {
+router.post('/checkouts', async(req, res) => {
     try {
         const { _id, id } = req.body;
 
@@ -111,6 +111,38 @@ router.post('/checkouts', authenticate, async(req, res) => {
         });
     } catch (err) {
         console.log(err)
+    }
+})
+
+router.post('/googleLogin', async(req, res) => {
+
+    let token
+
+    const { username, email, password, phone } = req.body;
+
+    if (!email) {
+        return res.status(422).json({ error: "please fill all the fields" });
+    }
+
+    try {
+        const userExist = await User.findOne({ email: email });
+        if (userExist) {
+            token = await userExist.generateAuthToken();
+            //console.log(token)
+            res.json({ userExist, token })
+        } else {
+            const user = new User({ username, email, password, phone });
+            await user.save();
+            //console.log(user)
+
+            token = await user.generateAuthToken();
+            //console.log(user)
+            res.json({ user, token })
+        }
+
+
+    } catch (err) {
+        console.log(err);
     }
 })
 

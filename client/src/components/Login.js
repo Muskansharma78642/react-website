@@ -2,8 +2,6 @@ import React,{ useState } from 'react';
 import './style.css';
 import GoogleLogin from "react-google-login"
 
-const users = JSON.parse(localStorage.getItem("users"))
-
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,16 +17,49 @@ const Login = () => {
     });
 
     const data = await res.json();
-    if(res.status === 400 || !data){
-      console.log("Invalid Credentials");
-    } else {
-      console.log("Login Successful") 
+    console.log(data)
+    // if(res.status === 400 || !data){
+    //   console.log("Invalid Credentials");
+    // } else {
+    //   console.log("Login Successful") 
+    // }
+    if(!data.token){
+      console.log("Invalid Credentials")
+    }else {
+      console.log(data.token)
+      localStorage.setItem("jwtoken", JSON.stringify(data.token))
+      localStorage.setItem("activeUser", JSON.stringify(data.userLogin)) 
     }
   } 
 
-  const responseGoogle = (response) => {
+  const responseGoogle =  async(response) => {
     console.log(response);
     console.log(response.profileObj)
+    const email = response.profileObj.email
+    const username = response.profileObj.givenName
+    const phone = 1234567890
+    const password = response.profileObj.googleId
+
+    const res = await fetch('/googleLogin', {
+      method: 'POST',
+      headers:{ "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password, phone })
+    });
+
+    const data = await res.json();
+    console.log(data)
+    // if(res.status === 400 || !data){
+    //   console.log("Invalid Credentials");
+    // } else {
+    //   console.log("Login Successful") 
+    // }
+    if(!data.token){
+      console.log("Invalid Credentials")
+    }else {
+      console.log(data.token)
+      localStorage.setItem("jwtoken", JSON.stringify(data.token))
+      localStorage.setItem("activeUser", JSON.stringify(data.userExist)) 
+    }
   }
 
   return (

@@ -2,32 +2,45 @@ import React, { useState, useEffect } from 'react';
 import './style.css';
 
 const storedProducts = JSON.parse(localStorage.getItem("products"))
-    //const activeUser = JSON.parse(localStorage.getItem("activeUser"))
+const activeUsers = JSON.parse(localStorage.getItem("activeUser"))
+const jwtoken = JSON.parse(localStorage.getItem('jwtoken')) 
 
 const Products = () => {
     const [products, setProducts] = useState(storedProducts)
-    const [activeUser, setActiveUser] = useState();
-    const [cartQuantity, setCartQuantity] = useState({})
+    const [activeUser, setActiveUser] = useState(activeUsers);
+    const [cartQuantity, setCartQuantity] = useState(activeUser.cartItems.length)
     //console.log(products)
 
     const callProductsPage = async () => {
         try{
-            const res = await fetch('/product', {
-                headers : {
-                    Accept : "application/json",
-                    "Content-Type" : "application/json"
-                },
-                credentials: "include"
-            });
-            const activeUser = await res.json();
-            setActiveUser(activeUser)
-            setCartQuantity(activeUser.cartItems.length)
-            localStorage.setItem("activeUser", JSON.stringify(activeUser))
+          
+            // const res = await fetch('/product', {
+            //     headers : {
+            //         Accept : "application/json",
+            //         "Content-Type" : "application/json"
+            //     },
+            //     credentials: "include"
+            // });
+            // const activeUser = await res.json();
+            // setActiveUser(activeUser)
+            // setCartQuantity(activeUser.cartItems.length)
+            // localStorage.setItem("activeUser", JSON.stringify(activeUser))
 
-            if(!res.status === 200) {
-                const error = new Error(res.error);
-                throw error;
+            // if(!res.status === 200) {
+            //     const error = new Error(res.error);
+            //     throw error;
+            // }
+          if(!activeUser){
+            return( <h2>Please Login to continue shopping</h2>);
+          }
+          activeUser.tokens.map((token) => {
+            if(token !== jwtoken){
+              return( <h2>Unauthorized User</h2> );
+            }else {
+              return(`${activeUser.username}, Welcome`);
             }
+          })
+
         }catch(err){
             console.log(err);
         }

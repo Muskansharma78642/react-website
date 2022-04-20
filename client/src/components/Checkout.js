@@ -165,7 +165,8 @@ const Checkout = () => {
     <StripeCheckout 
       stripeKey={process.env.REACT_APP_KEY}
       token={makePayment}
-      name=''
+      name='CheckOut'
+      //shippingAddress
     >
       <button className='btn'>Pay {bill}</button>
     </StripeCheckout>

@@ -2,60 +2,6 @@ import logo from './logo.svg';
 import './App.css';
 
 let data = {
-    users: [{
-            userId: '1',
-            firstName: "xxx",
-            lastName: "xxx",
-            email: "xxx@gmail.com",
-            phone: "1234567890",
-            address: "x street",
-            password: "qwerty",
-            confirmPassword: "qwerty",
-            cartItem: [],
-            totalAmount: [],
-            product: []
-        },
-        {
-            userId: '2',
-            firstName: "yyy",
-            lastName: "yyy",
-            email: "yyy@gmail.com",
-            phone: "2345678901",
-            address: "y street",
-            password: "abcd",
-            confirmPassword: "abcd",
-        },
-        {
-            userId: "3",
-            firstName: "zzz",
-            lastName: "zzz",
-            email: "zzz@gmail.com",
-            phone: "3456789012",
-            address: "z street",
-            password: "abcde",
-            confirmPassword: "abcde",
-        },
-        {
-            userId: "4",
-            firstName: "aaa",
-            lastName: "aaa",
-            email: "aaa@gmail.com",
-            phone: "4567890123",
-            address: "a street",
-            password: "abcdef",
-            confirmPassword: "abcdef",
-        },
-        {
-            userId: "5",
-            firstName: "bbb",
-            lastName: "bbb",
-            email: "xxx@gmail.com",
-            phone: "5678901234",
-            address: "b street",
-            password: "abcdefg",
-            confirmPassword: "absdefg",
-        },
-    ],
     products: [{
             productId: 1,
             productName: "Office Chair",
@@ -148,8 +94,6 @@ let data = {
         },
     ],
 };
-
-localStorage.setItem("users", JSON.stringify(data.users))
 localStorage.setItem("products", JSON.stringify(data.products))
 
 function App() {
