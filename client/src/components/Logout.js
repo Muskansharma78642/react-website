@@ -18,6 +18,9 @@ const Logout = () => {
         })
     })
 
+    localStorage.removeItem('activeUser');
+    localStorage.removeItem('jwtoken')
+
   return (
     <>
     <nav id='navbar'>
