@@ -1,5 +1,8 @@
-import logo from './logo.svg';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 import './App.css';
+import ImageCarousal from './components/ImageCarousal'
 
 let data = {
     products: [{
@@ -97,14 +100,17 @@ let data = {
 localStorage.setItem("products", JSON.stringify(data.products))
 
 function App() {
-  return (
-    <nav id='navbar'>
-      <a href='./registration'>Registeration</a>
-      <a href='./login'>Login</a>
-      <a href='./products'>Products</a>
-      <a href='./checkout'>Checkout</a>
-    </nav>
-  );
+    return(
+      <>
+        <nav id='navbar'>
+          <a href='./registration'>Registeration</a>
+          <a href='./login'>Login</a>
+          <a href='./products'>Products</a>
+          <a href='./checkout'>Checkout</a>
+        </nav>
+        <ImageCarousal />
+      </>
+    );
 }
 
 export default App;
