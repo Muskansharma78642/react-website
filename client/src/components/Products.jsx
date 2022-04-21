@@ -8,12 +8,12 @@ const jwtoken = JSON.parse(localStorage.getItem('jwtoken'))
 const Products = () => {
     const [products, setProducts] = useState(storedProducts)
     const [activeUser, setActiveUser] = useState(activeUsers);
-    const [cartQuantity, setCartQuantity] = useState(activeUser.cartItems.length)
+    const [cartQuantity, setCartQuantity] = useState(0)
     //console.log(products)
 
     const callProductsPage = async () => {
         try{
-          
+
             // const res = await fetch('/product', {
             //     headers : {
             //         Accept : "application/json",

@@ -5,7 +5,7 @@ import StripeCheckout from 'react-stripe-checkout';
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
 const Checkout = () => {
-  const [checkoutItems, setCheckoutItems] = useState(activeUser.cartItems)
+  const [checkoutItems, setCheckoutItems] = useState({})
   const [bill, setBill] = useState(0)
 
   const postProducts = async( _id, id ) => {
@@ -125,6 +125,7 @@ const Checkout = () => {
       <a href='./products'>Products</a>
       <a href='./checkout'>Checkout</a>
     </nav>
+    <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
     <div className='shop-items'>
       {activeUser.cartItems.map((product) => {
         return (
