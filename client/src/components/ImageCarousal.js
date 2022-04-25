@@ -21,7 +21,7 @@ const ImageCarousal = () => {
      <div className="App">
        <Slider {...settings}>
          {products.map((product) => {
-           if(product.productPrice < 8000){
+           if(product.productPrice < 700){
              return(
              <div key={product.productId} className="slick-slide">
                <h3 className="slick-slide-title">{product.productName}   <span className="slick-slide-label">{product.productPrice}</span> </h3>

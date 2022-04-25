@@ -8,8 +8,14 @@ const jwtoken = JSON.parse(localStorage.getItem('jwtoken'))
 const Products = () => {
     const [products, setProducts] = useState(storedProducts)
     const [activeUser, setActiveUser] = useState(activeUsers);
-    const [cartQuantity, setCartQuantity] = useState(0)
+    const [cartQuantity, setCartQuantity] = useState(activeUser ? `${activeUser.cartItems.length}` : `(0)`)
     //console.log(products)
+    let catagories = []
+    storedProducts.map((product) => {
+      catagories.push(product.productCatagory)
+    })
+    const catagory = Array.from(new Set(catagories))
+    //console.log(catagory)
 
     const callProductsPage = async () => {
         try{
@@ -80,9 +86,9 @@ const Products = () => {
             activeUser.cartItems.push(item)
             activeUser.products.push(selectedProduct)
             localStorage.setItem("activeUser", JSON.stringify(activeUser)) 
-            setCartQuantity(activeUser.cartItems.length)
             removeAddButton(id)
             postProducts(activeUser._id, item) 
+            setCartQuantity(activeUser.cartItems.length)
           }
         })
 
@@ -135,6 +141,11 @@ const Products = () => {
         })
     }
 
+    const handleCategoryChange = (e) => {
+      let singleProduct = products.filter(product => product.productCatagory === e.target.value)
+      //console.log(singleProduct)
+      setProducts(singleProduct)
+    }
 
     return(
         <div>
@@ -145,7 +156,19 @@ const Products = () => {
       <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
 
     </nav>
-    { activeUser ? <h3>{`${activeUser.username}, Welcome!`}</h3> : <h3>You need to login to Shop!</h3>}
+
+    <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
+    
+    <div>
+      <select onChange={(e) => handleCategoryChange(e)}>
+            {catagory.map((product) => {
+         return(
+           <option key={product}>{product}</option>
+         );
+       })} 
+      </select>
+    </div>
+
     <div className='outer-grid'>
       {products.map((product) => {
       if(product.productId % 2 === 0){
@@ -154,6 +177,7 @@ const Products = () => {
               <h3>{product.productName}</h3>
               <img src={product.productUrl} alt={product.productName} />
               <p>{product.productPrice}</p>
+              <span>Catagory-{product.productCatagory}</span>
               <button className='btn' id={`addButton${product.productId}`} onClick={() => addProduct(product.productId)}>Add Product</button>
               <div className='quantity' id={`quantityButton${product.productId}`}>
                 <button className='plus-btn' onClick={() =>increaseQuantity(product.productId)}> + </button>
@@ -168,6 +192,7 @@ const Products = () => {
               <h3>{product.productName}</h3>
               <img src={product.productUrl} alt={product.productName} />
               <p>{product.productPrice}</p>
+              <span>Catagory-{product.productCatagory}</span>
               <button className='btn' id={`addButton${product.productId}`} onClick={() => addProduct(product.productId)}>Add Product</button>
               <div className='quantity' id={`quantityButton${product.productId}`}>
                 <button className='plus-btn' onClick={() => increaseQuantity(product.productId)}> + </button>

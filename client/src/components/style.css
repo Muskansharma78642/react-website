@@ -12,6 +12,19 @@
     font-family: 'Poppins', sans-serif;
 }
 
+select {
+    appearance: none;
+    outline: 0;
+    background-image: none;
+    background-color: steelblue;
+    height: 30px;
+    width: 35%;
+    color: white;
+    cursor: pointer;
+    margin: 2%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
 .container {
     max-width: 500px;
     margin: 30px auto;
@@ -67,7 +80,9 @@ p {
     max-width: 25%;
     padding: 8px;
     border: solid 2px steelblue;
-    margin: 5px;
+    margin: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .inner-grid img {
@@ -221,6 +236,7 @@ body {
     display: flex;
     margin: 30px auto;
     padding: 30px;
+    background-color: #FFFFFF;
 }
 
 .item:nth-child(3) {
@@ -329,6 +345,7 @@ input:focus {
     .item {
         height: auto;
         flex-wrap: wrap;
+        background-color: white;
     }
     .image img {
         height: 40px;
