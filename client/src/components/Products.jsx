@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+import { Autocomplete, TextField, Stack, Box } from '@mui/material';
+
 
 const storedProducts = JSON.parse(localStorage.getItem("products"))
 const activeUsers = JSON.parse(localStorage.getItem("activeUser"))
@@ -9,14 +11,18 @@ const Products = () => {
     const [products, setProducts] = useState(storedProducts)
     const [activeUser, setActiveUser] = useState(activeUsers);
     const [cartQuantity, setCartQuantity] = useState(activeUser ? `${activeUser.cartItems.length}` : `(0)`)
-    //console.log(products)
-    let catagories = []
-    storedProducts.map((product) => {
-      catagories.push(product.productCatagory)
-    })
-    const catagory = Array.from(new Set(catagories))
-    //console.log(catagory)
+    const [value, setValue] = useState()
 
+    let cataegoriesArray = []
+    storedProducts.map((product) => {
+      let category = product.productCatagory
+      cataegoriesArray.push( category )
+    })
+
+    var singleCategories = Array.from(new Set(cataegoriesArray))
+    //console.log(singleCategories)
+
+    
     const callProductsPage = async () => {
         try{
 
@@ -141,8 +147,16 @@ const Products = () => {
         })
     }
 
-    const handleCategoryChange = (e) => {
+    var handleCategoryChange = (e) => {
+      console.log(e)
       let singleProduct = products.filter(product => product.productCatagory === e.target.value)
+      //console.log(singleProduct)
+      setProducts(singleProduct)
+    }
+
+    var handleCategoryChangeInSearchBox = (e) => {
+      setValue(e.target.innerHTML)
+      let singleProduct = products.filter(product => product.productName === e.target.innerHTML)
       //console.log(singleProduct)
       setProducts(singleProduct)
     }
@@ -158,12 +172,29 @@ const Products = () => {
     </nav>
 
     <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
-    
+
+      <Stack sx={{ width: 300, margin: 'auto' }}>
+        <Autocomplete 
+          id='searchBox'
+          getOptionLabel={(products) => `${products.productName}`}
+          options={products}
+          // renderOption={(props, option) => {
+          //   <Box component='li' key={option} {...props}>
+          //     return({option}); 
+          //   </Box>
+          // }}
+          defaultValue={value}
+          onChange={(e) => handleCategoryChangeInSearchBox(e)}
+          noOptionsText={'No such products available'}
+          renderInput ={(params) => <TextField {...params} label="Search Products"/>}
+        />
+      </Stack>
+
     <div>
       <select onChange={(e) => handleCategoryChange(e)}>
-            {catagory.map((product) => {
+            {singleCategories.map((product) => {
          return(
-           <option key={product}>{product}</option>
+           <option key={product.id}>{product}</option>
          );
        })} 
       </select>
