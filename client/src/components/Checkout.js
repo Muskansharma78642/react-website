@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
 import StripeCheckout from 'react-stripe-checkout';
 
@@ -37,9 +37,8 @@ const Checkout = () => {
         setCheckoutItems(activeUser.cartItems)
       }
     })
-      window.location.reload()
-      //calculateBill(id)
   }
+  
   const increaseQuantity = (id) => {
     var valueCount = document.getElementById(`numberOfProduct${id}`).value
     if (valueCount >= 1) {
@@ -53,8 +52,6 @@ const Checkout = () => {
         setCheckoutItems(activeUser.cartItems)
       }
     })
-      window.location.reload()
-      //calculateBill(id)
   }
   }
   const decreaseQuantity = (id) => {
@@ -70,8 +67,6 @@ const Checkout = () => {
         setCheckoutItems(activeUser.cartItems)
       }
     })
-      window.location.reload()
-      //calculateBill(id)
   }
   }
 
@@ -95,7 +90,9 @@ const Checkout = () => {
     })
   }
 
-  window.onload = calculateBill
+  useEffect(() => {
+    calculateBill()
+  }, [checkoutItems])
 
   const makePayment = token => {
     const body = {

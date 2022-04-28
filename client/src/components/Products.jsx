@@ -78,6 +78,10 @@ const Products = () => {
 
     useEffect(() => {
         callProductsPage();
+        
+        window.addEventListener('storage', () => {
+        setProducts(JSON.parse(localStorage.getItem('products')))   
+        });
     },[activeUser])
 
     const addProduct = async (id) => {
