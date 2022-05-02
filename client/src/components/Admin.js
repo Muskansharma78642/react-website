@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
+
+
+let activeUser = JSON.parse(localStorage.getItem("activeUser"))
+
 let data = {
     products: [{
             productId: 1,
@@ -220,17 +224,17 @@ var stored_product = JSON.parse(localStorage.getItem("products"))
 const Admin = () => {
     const [formValues, setFormValues] = useState({
         productCatagory:"",
-        productId:"",
+        productId: undefined,
         productName:"",
         productOwner:"",
-        productPrice: null,
-        productQuantity: null,
+        productPrice: undefined,
+        productQuantity: undefined,
         productUrl:"",
     })
 
     const [products,setProducts] = useState(stored_product)
-
     const [formErrors, setFormErrors] = useState({})
+    const [input, setInput] = useState('')
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -272,7 +276,7 @@ const Admin = () => {
     }
     
     return errors;
-  };
+    };
 
   const storeProductsInLocalstorage = (values) => {
     const productId = Math.floor(Math.random() * 100000) + 1
@@ -283,20 +287,100 @@ const Admin = () => {
     localStorage.setItem("products", JSON.stringify(stored_product))
   }
 
+  const removeItem = (id) => {
+    products.map((item) => {
+      if (item.productId === id) {
+        let newProducts = products.filter(x => x.productId !== id)
+        //console.log(newProducts)
+        setProducts(newProducts)
+        localStorage.setItem("products", JSON.stringify(newProducts))
+      }
+    })
+  }
+
+  const saveChanges = (id, name, value) => {
+    console.log("save changes")
+    products.map((product) => {
+      if(product.productId === id){
+        const newProducts = {...product ,[name]: value}
+        console.log(newProducts)
+        localStorage.setItem("products", JSON.stringify(products))
+      }
+    })
+  }
+ 
+  const handleNameChange = (id, e) => {
+    console.log(e.target)
+    products.map((item) => {
+      if(item.productId === id) {
+        item.productName = e.target.value
+        setInput(e.target.value)
+        //saveChanges(id, e.target.name, e.target.value)
+      }
+    })
+  }
+
+  const handleCatagoryChange = (id, e) => {
+    console.log(e.target)
+    products.map((item) => {
+      if(item.productId === id) {
+        item.productCatagory = e.target.value
+        setInput(e.target.value)
+        //saveChanges(id, e.target.name, e.target.value)
+      }
+    })
+  }
+
+  const handlePriceChange = (id, e) => {
+    console.log(e.target)
+    products.map((item) => {
+      if(item.productId === id) {
+        item.productPrice = e.target.value
+        setInput(e.target.value)
+        //saveChanges(id, e.target.name, e.target.value)
+      }
+    })
+  }
+
+  const handleQuantityChange = (id, e) => {
+    console.log(e.target)
+    products.map((item) => {
+      if(item.productId === id) {
+        item.productQuantity = e.target.value
+        setInput(e.target.value)
+        //saveChanges(id, e.target.name, e.target.value)
+      }
+    })
+  }
+
+  const handleUrlChange = (id, e) => {
+    console.log(e.target)
+    products.map((item) => {
+      if(item.productId === id) {
+        item.productUrl = e.target.value
+        setInput(e.target.value)
+        //saveChanges(id, e.target.name, e.target.value)
+      }
+    })
+  }
+
   useEffect(() => {
         window.addEventListener('storage', () => {
         setProducts(JSON.parse(localStorage.getItem('products')))   
         });
-    },[products])
+    },[products, formValues])
 
   return (
     <div>
-        <nav id='navbar'>
+      <nav id='navbar'>
         <a href='./registration'>Registeration</a>
+        <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
         <a href='./products'>Products</a>
         <a href='./checkout'>Checkout</a>
       </nav>
-        <h2>Enter All the details of the New product to be added</h2>
+
+      <h2>Enter All the details of the New product to be added</h2>
+      
       <div>
         <form method='POST' className='container'>
           <div className="field">
@@ -367,9 +451,15 @@ const Admin = () => {
         <h2>List of already stored products</h2>
         {products.map((product) => {
           return( 
-            <p key={product.productId}>
-              {product.productName}
-            </p>
+            <div className='item' key={product.productId}>
+              <input type="text" name='productName' value={product.productName} onChange={(e) => {handleNameChange(product.productId, e)}} />
+              <input type="text" name='productCategory' value={product.productCatagory} onChange={(e) => {handleCatagoryChange(product.productId, e)}}/>
+              <input type="number" name='productPrice' value={product.productPrice} onChange={(e) => {handlePriceChange(product.productId, e)}}/>
+              <input type="number" name='productQuantity' value={product.productQuantity} onChange={(e) => {handleQuantityChange(product.productId, e)}}/>
+              <input type="text" name='productUrl' value={product.productUrl} onChange={(e) => {handleUrlChange(product.productId, e)}}/>
+              <button className='btn' onClick={() => removeItem(product.productId)}>Remove</button>
+              <button className='btn' onClick={(e) => saveChanges(product.productId, e.target.name, e.target.value)}>Save Changes</button>
+            </div>
           );
         })}
       </div>

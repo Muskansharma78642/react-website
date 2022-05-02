@@ -65,6 +65,8 @@ pre {
 
 p {
     color: red;
+    padding: 10px 20px;
+    margin: 5px;
 }
 
 .outer-grid {
