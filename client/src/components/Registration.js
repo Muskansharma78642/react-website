@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-//import { useHistory } from 'react-router-dom';
 import './style.css';
 import Loader from './Loader';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
 const Registration = () => {
   const [formValues, setFormValues] = useState(
@@ -50,6 +50,7 @@ const Registration = () => {
       console.log("registration successful")
       setLoading(false)
       navigate('/login')
+
       console.log(data)
     }
   }
@@ -93,10 +94,10 @@ const Registration = () => {
    return(
     <div>
       <nav id='navbar'>
-        <a href='./registration'>Registeration</a>
-        <a href='./login'>Login</a>
-        <a href='./products'>Products</a>
-        <a href='./checkout'>Checkout</a>
+        <Link to='/registration'>Registeration</Link>
+        <Link to='/login'>Login</Link>
+        <Link to='/products'>Products</Link>
+        <Link to='/checkout'>Checkout</Link>
       </nav>
 
       {loading ? <Loader /> : null}

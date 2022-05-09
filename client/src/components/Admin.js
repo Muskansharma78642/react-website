@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import Loader from './Loader'
+import { Link } from 'react-router-dom'
 
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
@@ -430,10 +431,10 @@ const Admin = () => {
   return (
     <div>
       <nav id='navbar'>
-        <a href='./registration'>Registeration</a>
-        <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
-        <a href='./products'>Products</a>
-        <a href='./checkout'>Checkout</a>
+        <Link to='/registration'>Registeration</Link>
+        <Link to={activeUser ? `/logout` : `/login`}>{ activeUser ? 'Logout' : 'Login'}</Link>
+        <Link to='/products'>Products</Link>
+        <Link to='/checkout'>Checkout</Link>
       </nav>
 
       {loading ? <Loader /> : null}

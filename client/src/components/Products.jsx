@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './style.css';
 import { Autocomplete, TextField, Stack } from '@mui/material';
 import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
 const storedProducts = JSON.parse(localStorage.getItem("products"))
 const activeUsers = JSON.parse(localStorage.getItem("activeUser"))
@@ -158,35 +159,30 @@ const Products = () => {
     }
 
     return(
-        <div>
-      <nav id='navbar'>
-      <a href='./registration'>Registeration</a>
-      <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
-      <a href='./products'>Products</a>
-      <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
-    </nav>
+      <div>
+        <nav id='navbar'>
+          <Link to='/registration'>Registeration</Link>
+          <Link to={activeUser ? `/logout` : `/login`}>{ activeUser ? 'Logout' : 'Login'}</Link>
+          <Link to='/products'>Products</Link>
+          <Link to='/checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</Link>
+        </nav>
 
-    {loading ? <Loader /> : null}
+        {loading ? <Loader /> : null}
 
-    <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
+        <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
 
-      <Stack sx={{ width: 300, margin: 'auto' }}>
-        <Autocomplete 
+        <Stack sx={{ width: 300, margin: 'auto' }}>
+          <Autocomplete 
           id='searchBox'
           getOptionLabel={(products) => `${products.productName}`}
           options={products}
-          // renderOption={(props, option) => {
-          //   <Box component='li' key={option} {...props}>
-          //     return({option}); 
-          //   </Box>
-          // }}
           defaultValue={value}
           onChange={(e) => handleChangeInSearchBox(e)}
           
           noOptionsText={'No such products available'}
           renderInput ={(params) => <TextField {...params} label="Search Products"/>}
-        />
-      </Stack>
+          />
+        </Stack>
 
     <div>
       <select onChange={(e) => handleCategoryChange(e)}>

@@ -2,7 +2,7 @@ import React,{ useState } from 'react';
 import './style.css';
 import GoogleLogin from "react-google-login"
 import Loader from './Loader';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 
 const Login = () => {
@@ -68,10 +68,10 @@ const Login = () => {
   return (
     <div>
       <nav id='navbar'>
-      <a href='./registration'>Registeration</a>
-      <a href='./login'>Login</a>
-      <a href='./products'>Products</a>
-      <a href='./checkout'>Checkout</a>
+      <Link to='./registration'>Registeration</Link>
+      <Link to='./login'>Login</Link>
+      <Link to='./products'>Products</Link>
+      <Link to='./checkout'>Checkout</Link>
     </nav>
     {loading? <Loader /> : null}
     <form className='container' method='POST'>
