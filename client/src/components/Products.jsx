@@ -153,7 +153,6 @@ const Products = () => {
       }
 
       let singleProduct = products.filter(product => product.productName === e.target.innerHTML)
-
       setProducts(singleProduct)
       setLoading(false)
     }

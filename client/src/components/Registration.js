@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 //import { useHistory } from 'react-router-dom';
 import './style.css';
 import Loader from './Loader';
+import { useNavigate } from 'react-router-dom'
 
 const Registration = () => {
   const [formValues, setFormValues] = useState(
@@ -11,6 +12,7 @@ const Registration = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [user, setUser] = useState([])
   const [loading, setLoading] = useState()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,6 +49,7 @@ const Registration = () => {
     } else {
       console.log("registration successful")
       setLoading(false)
+      navigate('/login')
       console.log(data)
     }
   }
@@ -97,7 +100,7 @@ const Registration = () => {
       </nav>
 
       {loading ? <Loader /> : null}
-      
+
       <h2 className='title'>Register Yourself!</h2>
       <div className='container'>
         <form method='POST' onSubmit={handleSubmit}>

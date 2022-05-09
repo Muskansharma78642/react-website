@@ -2,19 +2,15 @@ import React,{ useState } from 'react';
 import './style.css';
 import GoogleLogin from "react-google-login"
 import Loader from './Loader';
-// import { useNavigate } from 'react-router-dom'
-// import Products from './Products'
+import { useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
-  // const navigate = withRouter()
-  // const [jwtoken, setJwtoken] = useState(false)
-  // const token = JSON.parse(localStorage.getItem('jwtoken'))
-  // {token ? setJwtoken(true) : setJwtoken(false)}
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [formErrors, setFormErrors] = useState({})
   const [loading, setLoading] = useState()
+  const navigate = useNavigate();
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -28,11 +24,7 @@ const Login = () => {
 
     const data = await res.json();
     console.log(data)
-    // if(res.status === 400 || !data){
-    //   console.log("Invalid Credentials");
-    // } else {
-    //   console.log("Login Successful") 
-    // }
+
     if(!data.token){
       console.log("Invalid Credentials")
     }else {
@@ -40,10 +32,12 @@ const Login = () => {
       localStorage.setItem("jwtoken", JSON.stringify(data.token))
       localStorage.setItem("activeUser", JSON.stringify(data.userLogin)) 
       setLoading(false)
+      navigate('/products')
     }
   } 
 
   const responseGoogle =  async(response) => {
+    setLoading(true)
     console.log(response);
     console.log(response.profileObj)
     const email = response.profileObj.email
@@ -59,17 +53,15 @@ const Login = () => {
 
     const data = await res.json();
     console.log(data)
-    // if(res.status === 400 || !data){
-    //   console.log("Invalid Credentials");
-    // } else {
-    //   console.log("Login Successful") 
-    // }
+   
     if(!data.token){
       console.log("Invalid Credentials")
     }else {
       console.log(data.token)
+      setLoading(false)
       localStorage.setItem("jwtoken", JSON.stringify(data.token))
-      localStorage.setItem("activeUser", JSON.stringify(data.userExist)) 
+      localStorage.setItem("activeUser", JSON.stringify(data.userExist))  
+      navigate('/products')
     }
   }
 
@@ -112,7 +104,6 @@ const Login = () => {
               cookiePolicy={'single_host_origin'}
             />
     </form>
-    {/* <Route path='/products' element={jwtoken ? <Navigate to={<Products />}/> : <p>Login was not Successful</p>}/> */}
     </div>
   );
 }
