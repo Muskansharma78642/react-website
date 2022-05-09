@@ -178,4 +178,32 @@ router.post('/payment', (req, res) => {
         .catch(err => console.log(err))
 })
 
+router.get('/sendUsers', (req, res) => {
+
+    // const length = await User.countDocuments({ _id })
+
+    // if (!length) {
+    //     res.status(200).json({ error: "Cannot load length" })
+    // } else {
+    //     res.send(length)
+    // }
+
+    User.find({}, function(err, users) {
+        if (err) throw err;
+        res.send(users);
+    });
+
+    // User.find()
+    //     .then((user) => res.status(200).json({ User, user }))
+    //     .catch((error) => res.status(400).json({ error: `Couldn't fetch users${error}` }))
+
+    // var users = User.find(token)
+
+    // if ((await users.count()) === 0) {
+    //     res.send({ error: `${error}` })
+    // } else {
+    //     res.send(users)
+    // }
+})
+
 module.exports = router;

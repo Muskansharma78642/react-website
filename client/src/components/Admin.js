@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
-
+import Loader from './Loader'
 
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
@@ -215,9 +215,43 @@ let data = {
     ],
 };
 
+const users = [
+      {
+        id: 1,
+        username: 'xxx',
+        email:'xxx@gmail.com',
+        phone: 1234567890,
+        password: 'qwerty',
+        cartItems:[],
+        token:[],
+      },{
+        id: 1,
+        username: 'xxx',
+        phone: 1234567890,
+        email:'xxx@gmail.com',
+        password: 'qwerty',
+        cartItems:[],
+        token:[],
+      },{
+        id: 1,
+        username: 'xxx',
+        phone: 1234567890,
+        email:'xxx@gmail.com',
+        password: 'qwerty',
+        cartItems:[],
+        token:[],
+      },
+    ]
+
+console.log(users)
+
 localStorage.setItem("products", JSON.stringify(data.products))
+localStorage.setItem("users", JSON.stringify(users))
+
 
 var stored_product = JSON.parse(localStorage.getItem("products"))
+var stored_user = JSON.parse(localStorage.getItem("users"))
+
 //console.log(stored_product)
 
 
@@ -235,6 +269,8 @@ const Admin = () => {
     const [products,setProducts] = useState(stored_product)
     const [formErrors, setFormErrors] = useState({})
     const [input, setInput] = useState('')
+    const [user, setUser] = useState(stored_user)
+    const [loading, setLoading] = useState()
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -364,10 +400,31 @@ const Admin = () => {
     })
   }
 
+  const getUsers = async () => {
+
+    var response = fetch('/sendUsers', {
+      method: 'GET',
+      headers:{ "Content-Type": "application/json" },
+    });
+
+    const data = await response
+    //console.log(data)
+
+    if(!data){
+      console.log("Could not fetch users")
+    }else {
+      console.log(data)
+      setUser(data)
+    }
+  }
+
   useEffect(() => {
         window.addEventListener('storage', () => {
         setProducts(JSON.parse(localStorage.getItem('products')))   
         });
+        getUsers()
+        
+        {products? setLoading(false) : setLoading(true)}
     },[products, formValues])
 
   return (
@@ -379,8 +436,22 @@ const Admin = () => {
         <a href='./checkout'>Checkout</a>
       </nav>
 
-      <h2>Enter All the details of the New product to be added</h2>
+      {loading ? <Loader /> : null}
       
+      <div className='outer-grid'>
+        <section className='inner-grid'>
+          Number of Users- {users.length}
+        </section>
+        <section className='inner-grid'>
+          Number of Products- {products.length}
+        </section>
+        <section className='inner-grid'>
+          
+        </section>
+      </div>
+
+      <h2>Enter All the details of the New product to be added</h2>
+   
       <div>
         <form method='POST' className='container'>
           <div className="field">
@@ -458,7 +529,7 @@ const Admin = () => {
               <input type="number" name='productQuantity' value={product.productQuantity} onChange={(e) => {handleQuantityChange(product.productId, e)}}/>
               <input type="text" name='productUrl' value={product.productUrl} onChange={(e) => {handleUrlChange(product.productId, e)}}/>
               <button className='btn' onClick={() => removeItem(product.productId)}>Remove</button>
-              <button className='btn' onClick={(e) => saveChanges(product.productId, e.target.name, e.target.value)}>Save Changes</button>
+              <button className='savebtn' onClick={(e) => saveChanges(product.productId, e.target.name, e.target.value)}>Save Changes</button>
             </div>
           );
         })}

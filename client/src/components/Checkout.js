@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 import StripeCheckout from 'react-stripe-checkout';
+import Loader from './Loader';
 
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
 const Checkout = () => {
   const [checkoutItems, setCheckoutItems] = useState({})
   const [bill, setBill] = useState(0)
+  const [loading, setLoading] = useState()
+
+  const location = {
+    lat: 22.97,
+    lng:	78.65
+  }
 
   const postProducts = async( _id, id ) => {
       console.log(_id, id)
@@ -92,6 +99,8 @@ const Checkout = () => {
 
   useEffect(() => {
     calculateBill()
+    {checkoutItems ? setLoading(false) : setLoading(true)}
+
   }, [checkoutItems])
 
   const makePayment = token => {
@@ -122,6 +131,9 @@ const Checkout = () => {
       <a href='./products'>Products</a>
       <a href='./checkout'>Checkout</a>
     </nav>
+
+    {loading ? <Loader /> : null}
+
     <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
     <div className='shop-items'>
       {activeUser.cartItems.map((product) => {
@@ -142,6 +154,7 @@ const Checkout = () => {
         )
       })}
     </div>
+
     <div className='title'>Cart</div>
     {activeUser.cartItems.map((product) => {
       return(
@@ -156,10 +169,12 @@ const Checkout = () => {
        </div>
       )
     })}
+
     <div className='shopping-cart'>
       <h3 className='title'>Total Bill-</h3>
       <span>{bill}</span>
     </div>
+
     <StripeCheckout 
       stripeKey={process.env.REACT_APP_KEY}
       token={makePayment}
@@ -168,6 +183,7 @@ const Checkout = () => {
     >
       <button className='btn'>Pay {bill}</button>
     </StripeCheckout>
+
   </div>
   );
 }

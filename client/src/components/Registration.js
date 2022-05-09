@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 //import { useHistory } from 'react-router-dom';
 import './style.css';
+import Loader from './Loader';
 
 const Registration = () => {
   const [formValues, setFormValues] = useState(
@@ -8,6 +9,8 @@ const Registration = () => {
   );
   const [formErrors, setFormErrors] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
+  const [user, setUser] = useState([])
+  const [loading, setLoading] = useState()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +32,7 @@ const Registration = () => {
 
   const postData = async(e) => {
     e.preventDefault()
+    setLoading(true)
     const { username, email, phone, password } = formValues;
      
     const res = await fetch("/register", {
@@ -42,6 +46,7 @@ const Registration = () => {
       console.log("invalid registration")
     } else {
       console.log("registration successful")
+      setLoading(false)
       console.log(data)
     }
   }
@@ -90,6 +95,9 @@ const Registration = () => {
         <a href='./products'>Products</a>
         <a href='./checkout'>Checkout</a>
       </nav>
+
+      {loading ? <Loader /> : null}
+      
       <h2 className='title'>Register Yourself!</h2>
       <div className='container'>
         <form method='POST' onSubmit={handleSubmit}>

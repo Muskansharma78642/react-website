@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './style.css';
-import { Autocomplete, TextField, Stack, Box } from '@mui/material';
-
+import { Autocomplete, TextField, Stack } from '@mui/material';
+import Loader from './Loader';
 
 const storedProducts = JSON.parse(localStorage.getItem("products"))
 const activeUsers = JSON.parse(localStorage.getItem("activeUser"))
@@ -9,7 +9,8 @@ const jwtoken = JSON.parse(localStorage.getItem('jwtoken'))
 
 const Products = () => {
     const [products, setProducts] = useState(storedProducts)
-    const [activeUser, setActiveUser] = useState(activeUsers);
+    const [loading, setLoading] = useState()
+    const [activeUser] = useState(activeUsers);
     const [cartQuantity, setCartQuantity] = useState(activeUser ? `${activeUser.cartItems.length}` : `(0)`)
     const [value, setValue] = useState()
 
@@ -25,23 +26,6 @@ const Products = () => {
     
     const callProductsPage = async () => {
         try{
-
-            // const res = await fetch('/product', {
-            //     headers : {
-            //         Accept : "application/json",
-            //         "Content-Type" : "application/json"
-            //     },
-            //     credentials: "include"
-            // });
-            // const activeUser = await res.json();
-            // setActiveUser(activeUser)
-            // setCartQuantity(activeUser.cartItems.length)
-            // localStorage.setItem("activeUser", JSON.stringify(activeUser))
-
-            // if(!res.status === 200) {
-            //     const error = new Error(res.error);
-            //     throw error;
-            // }
           if(!activeUser){
             return( <h2>Please Login to continue shopping</h2>);
           }
@@ -80,7 +64,9 @@ const Products = () => {
         callProductsPage();
         
         window.addEventListener('storage', () => {
-        setProducts(JSON.parse(localStorage.getItem('products')))   
+        setProducts(JSON.parse(localStorage.getItem('products')))
+
+        {products ? setLoading(false) : setLoading(true)}
         });
     },[activeUser])
 
@@ -158,11 +144,18 @@ const Products = () => {
       setProducts(singleProduct)
     }
 
-    var handleCategoryChangeInSearchBox = (e) => {
+    var handleChangeInSearchBox = (e) => {
+      setLoading(true)
       setValue(e.target.innerHTML)
+
+      if(value === ''){
+        setProducts(storedProducts)
+      }
+
       let singleProduct = products.filter(product => product.productName === e.target.innerHTML)
-      //console.log(singleProduct)
+
       setProducts(singleProduct)
+      setLoading(false)
     }
 
     return(
@@ -172,8 +165,9 @@ const Products = () => {
       <a href={activeUser ? `./logout` : `./login`}>{ activeUser ? 'Logout' : 'Login'}</a>
       <a href='./products'>Products</a>
       <a href='./checkout'>{activeUser ? `Checkout(${cartQuantity})` : `Checkout(0)`}</a>
-
     </nav>
+
+    {loading ? <Loader /> : null}
 
     <h2>{activeUser ? `${activeUser.username}, Welcome` : 'You need to Login to continue'}</h2>
 
@@ -188,7 +182,8 @@ const Products = () => {
           //   </Box>
           // }}
           defaultValue={value}
-          onChange={(e) => handleCategoryChangeInSearchBox(e)}
+          onChange={(e) => handleChangeInSearchBox(e)}
+          
           noOptionsText={'No such products available'}
           renderInput ={(params) => <TextField {...params} label="Search Products"/>}
         />

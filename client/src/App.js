@@ -1,9 +1,10 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ImageCarousal from "./components/ImageCarousal";
 import './App.css';
-import ImageCarousal from './components/ImageCarousal'
 
-function App() {
+
+const App=()=> {
     return(
       <>
         <nav id='navbar'>
