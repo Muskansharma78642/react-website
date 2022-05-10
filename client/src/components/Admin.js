@@ -244,7 +244,7 @@ const users = [
       },
     ]
 
-console.log(users)
+// console.log(users)
 
 localStorage.setItem("products", JSON.stringify(data.products))
 localStorage.setItem("users", JSON.stringify(users))

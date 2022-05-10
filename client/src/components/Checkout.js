@@ -3,6 +3,7 @@ import './style.css';
 import StripeCheckout from 'react-stripe-checkout';
 import Loader from './Loader';
 import { Link } from 'react-router-dom'
+import Maps from './Maps'
 
 let activeUser = JSON.parse(localStorage.getItem("activeUser"))
 
@@ -10,11 +11,6 @@ const Checkout = () => {
   const [checkoutItems, setCheckoutItems] = useState({})
   const [bill, setBill] = useState(0)
   const [loading, setLoading] = useState()
-
-  const location = {
-    lat: 22.97,
-    lng:	78.65
-  }
 
   const postProducts = async( _id, id ) => {
       console.log(_id, id)
@@ -101,7 +97,6 @@ const Checkout = () => {
   useEffect(() => {
     calculateBill()
     {checkoutItems ? setLoading(false) : setLoading(true)}
-
   }, [checkoutItems])
 
   const makePayment = token => {
@@ -185,8 +180,12 @@ const Checkout = () => {
       <button className='btn'>Pay {bill}</button>
     </StripeCheckout>
 
+    <Maps />
+
   </div>
   );
 }
 
 export default Checkout;
+
+

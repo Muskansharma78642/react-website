@@ -12,6 +12,14 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.circle {
+    width: 30px;
+    height: 30px;
+    background: no-repeat transparent;
+    display: block;
+    content: url(./pin.png);
+}
+
 select {
     appearance: none;
     outline: 0;
